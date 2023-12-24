@@ -28,11 +28,11 @@ SECRET_KEY = 'django-insecure-lu7n!lu59a%xsf890223mf1&lba_#(rh3z87%6qdny#8*x%ih!
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "pp97m4-8000.csb.app"
+    "h2l5xg-8000.csb.app"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://pp97m4-8000.csb.app'
+    'https://h2l5xg-8000.csb.app'
 ]
 
 # Application definition
