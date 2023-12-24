@@ -6,7 +6,8 @@ from .serializer import (
     UserLoginSerializer,
     UserProfileSerializer,
     UserChangePasswordSerializer,
-    SendPasswordResetEmailSerializer
+    SendPasswordResetEmailSerializer,
+    UserPasswordResetSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
@@ -72,7 +73,8 @@ class UserChangePasswordView(APIView):
         serializer = UserChangePasswordSerializer(
             data=request.data, context={'user': request.user})
         serializer.is_valid(raise_exception=True)
-        return Response({'msg': 'Password Changed Successfully'}, status=status.HTTP_200_OK)
+        return Response({'msg': 'Password Changed Successfully'},
+                        status=status.HTTP_200_OK)
 
 
 class SendPasswordResetEmailView(APIView):
@@ -82,4 +84,16 @@ class SendPasswordResetEmailView(APIView):
         serializer = SendPasswordResetEmailSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         email = User.objects.get(email=request.data.get('email')).email
-        return Response({'msg': f'Password reset credentials are sent on email {email}'})
+        return Response({'msg':
+                         f'Password reset credentials are sent on email {email}'})
+
+
+class UserPasswordResetView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, request, uid, token, format=None):
+        serializer = UserPasswordResetSerializer(
+            data=request.data, context={'uid': uid, 'token': token})
+        serializer.is_valid(raise_exception=True)
+        return Response({'msg': 'Password Reset Successfully'},
+                        status=status.HTTP_200_OK)

@@ -4,7 +4,8 @@ from Auth.views import (
     UserLoginView,
     UserProfileView,
     UserChangePasswordView,
-    SendPasswordResetEmailView
+    SendPasswordResetEmailView,
+    UserPasswordResetView
 )
 
 urlpatterns = [
@@ -15,4 +16,6 @@ urlpatterns = [
          name="Change password"),
     path('send-reset-on-email/', SendPasswordResetEmailView.as_view(),
          name="Send reset email"),
+    path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(),
+         name="Reset password")
 ]
