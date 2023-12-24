@@ -3,7 +3,8 @@ from Auth.views import (
     UserRegisterationView,
     UserLoginView,
     UserProfileView,
-    UserChangePasswordView
+    UserChangePasswordView,
+    SendPasswordResetEmailView
 )
 
 urlpatterns = [
@@ -11,6 +12,7 @@ urlpatterns = [
     path('login/', UserLoginView.as_view(), name="Login"),
     path('profile/', UserProfileView.as_view(), name="Profile"),
     path('change-password/', UserChangePasswordView.as_view(),
-         name="Change password")
-
+         name="Change password"),
+    path('send-reset-on-email/', SendPasswordResetEmailView.as_view(),
+         name="Send reset email"),
 ]

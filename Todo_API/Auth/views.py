@@ -5,12 +5,14 @@ from .serializer import (
     UserRegisterationSerializer,
     UserLoginSerializer,
     UserProfileSerializer,
-    UserChangePasswordSerializer
+    UserChangePasswordSerializer,
+    SendPasswordResetEmailSerializer
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from Auth.renderers import UserRenderer
 from django.contrib.auth import authenticate
+from .models import User
 
 
 def get_tokens_from_user(user):
@@ -71,3 +73,13 @@ class UserChangePasswordView(APIView):
             data=request.data, context={'user': request.user})
         serializer.is_valid(raise_exception=True)
         return Response({'msg': 'Password Changed Successfully'}, status=status.HTTP_200_OK)
+
+
+class SendPasswordResetEmailView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, request, format=None):
+        serializer = SendPasswordResetEmailSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = User.objects.get(email=request.data.get('email')).email
+        return Response({'msg': f'Password reset credentials are sent on email {email}'})

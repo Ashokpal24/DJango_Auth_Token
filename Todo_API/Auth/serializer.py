@@ -1,5 +1,9 @@
 from rest_framework import serializers
 from Auth.models import User
+from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from .utils import Util
 
 
 class UserRegisterationSerializer(serializers.ModelSerializer):
@@ -62,3 +66,26 @@ class UserChangePasswordSerializer(serializers.Serializer):
         user.set_password(password)
         user.save()
         return attrs
+
+
+class SendPasswordResetEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField(max_length=255)
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        if User.objects.filter(email=email).exists():
+            user = User.objects.get(email=email)
+            uid = urlsafe_base64_encode(force_bytes(user.id))
+            token = PasswordResetTokenGenerator().make_token(user)
+            body = f'''Hi There!!
+            Following is your UID[{uid}] and token[{token}].'''
+            data = {
+                'subject': 'Reset your Password',
+                'body': body,
+                'to_email': user.email
+            }
+            # print(data)
+            Util.send_email(data)
+            return attrs
+        else:
+            raise serializers.ValidationError("You aren't valid user.")
