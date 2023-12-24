@@ -31,6 +31,9 @@ ALLOWED_HOSTS = [
     "pp97m4-8000.csb.app"
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://pp97m4-8000.csb.app'
+]
 
 # Application definition
 
@@ -44,7 +47,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'Auth'
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,6 +135,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+AUTH_USER_MODEL = 'Auth.User'
 # JWT Configuration
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
